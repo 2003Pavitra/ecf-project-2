@@ -13,6 +13,11 @@ users = {
     "testuser": generate_password_hash("password")
 }
 
+# Add this root route to avoid 404 errors when accessing "/"
+@app.route("/", methods=["GET"])
+def home():
+    return jsonify({"msg": "Welcome to the Flask app!"})
+
 @app.route("/register", methods=["POST"])
 def register():
     username = request.json.get("username", None)
@@ -46,7 +51,6 @@ def protected():
     current_user = get_jwt_identity()
     return jsonify(logged_in_as=current_user), 200
 
-# Using Flask's built-in development server to start the app
+# Running the app on the local server (127.0.0.1)
 if __name__ == "__main__":
-    app.run(debug=True)
-
+    app.run(debug=True, host="127.0.0.1", port=5000)  # Local server binding
